@@ -17,24 +17,9 @@ class TodoListViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist"))
-        let newItem = Item()
-        newItem.title = "Preparar café"
-        array.append(newItem)
+        print(dataFilePath!)
         
-        let newItem2 = Item()
-        newItem2.title = "hacer ejercicio"
-        array.append(newItem2)
-        
-        let newItem3 = Item()
-        newItem3.title = "Aprender Docker"
-        array.append(newItem3)
-        
-        /*
-        if let itemsArray = defaults.array(forKey: "TodoListArray") as? [Item] {
-            array = itemsArray
-        }
-        */
+        loadItems()
         
     }
     
@@ -107,6 +92,18 @@ class TodoListViewController: UITableViewController {
         }
         
         self.tableView.reloadData()
+    }
+    
+    func loadItems() {
+        if let data = try? Data(contentsOf: dataFilePath!) {
+            let decoder = PropertyListDecoder()
+            do {
+                array = try decoder.decode([Item].self, from: data)
+            } catch {
+                print("Error decoding item array \(error)")
+            }
+            
+        }
     }
 }
 
