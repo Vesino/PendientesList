@@ -67,7 +67,8 @@ class TodoListViewController: UITableViewController {
                 alerta.addAction(accion)
                 self.present(alerta, animated: true, completion: nil)
             } else {
-                let newItemAdded = Item()
+                let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+                let newItemAdded = Item(context: <#T##NSManagedObjectContext#>)
                 newItemAdded.title = itemAdded
                 self.array.append(newItemAdded)
                 
