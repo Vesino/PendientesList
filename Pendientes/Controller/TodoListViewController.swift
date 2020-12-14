@@ -13,15 +13,13 @@ class TodoListViewController: UITableViewController {
     
     //array de Items Objects
     var array = [Item]()
-    
-    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(dataFilePath!)
+        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         
-        //loadItems()
+        loadItems()
         
     }
     
@@ -30,13 +28,9 @@ class TodoListViewController: UITableViewController {
         return array.count
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "TodoItemCell", for: indexPath)
-        
         let item = array[indexPath.row]
         cell.textLabel?.text = item.title
-        
         //Ternary operator
         cell.accessoryType = item.done ? .checkmark : .none
         
@@ -96,18 +90,17 @@ class TodoListViewController: UITableViewController {
         
         self.tableView.reloadData()
     }
-
-//    func loadItems() {
-//        if let data = try? Data(contentsOf: dataFilePath!) {
-//            let decoder = PropertyListDecoder()
-//            do {
-//                array = try decoder.decode([Item].self, from: data)
-//            } catch {
-//                print("Error decoding item array \(error)")
-//            }
-            
-//        }
-//    }
+    func loadItems() {
+        //We need to specifi the type of the output
+        let request : NSFetchRequest<Item> = Item.fetchRequest()
+        do {
+            array = try context.fetch(request)
+        } catch {
+            print("There was an error fetching data from context: \(error)")
+        }
+        
+        
+    }
 }
 
 
