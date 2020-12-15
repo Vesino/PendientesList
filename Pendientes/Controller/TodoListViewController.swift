@@ -19,6 +19,7 @@ class TodoListViewController: UITableViewController {
         super.viewDidLoad()
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         
+        //var searchBardelegate: UISearchBarDelegate = self
         loadItems()
         
     }
@@ -39,9 +40,14 @@ class TodoListViewController: UITableViewController {
     
     ////MARK: - Delegate functions
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //removing
+        
+        //context.delete(array[indexPath.row])
+        //array.remove(at: indexPath.row)
+        
         array[indexPath.row].done = !array[indexPath.row].done
         
-        self.saveItem()
+        saveItem()
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -101,7 +107,34 @@ class TodoListViewController: UITableViewController {
         
         
     }
+    
 }
 
+
+//MARK: - SearchBar Methods
+extension TodoListViewController: UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        let request: NSFetchRequest<Item> = Item.fetchRequest()
+        
+        //String comparisons are by default case and diacritic sensitive. we avoid this behaivior with CONTAINS[cd]
+        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        
+        request.predicate = predicate
+        
+        let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
+        request.sortDescriptors = [sortDescriptor]
+        
+        do {
+            array = try context.fetch(request)
+        } catch {
+            print("There was an error fetching data from context: \(error)")
+        }
+        
+        tableView.reloadData()
+        
+    }
+    
+}
 
 
