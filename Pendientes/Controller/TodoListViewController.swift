@@ -96,15 +96,16 @@ class TodoListViewController: UITableViewController {
         
         self.tableView.reloadData()
     }
-    func loadItems() {
+    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {
         //We need to specifi the type of the output
-        let request : NSFetchRequest<Item> = Item.fetchRequest()
+        //let request : NSFetchRequest<Item> = Item.fetchRequest()
         do {
             array = try context.fetch(request)
         } catch {
             print("There was an error fetching data from context: \(error)")
         }
         
+        tableView.reloadData()
         
     }
     
@@ -118,21 +119,21 @@ extension TodoListViewController: UISearchBarDelegate {
         let request: NSFetchRequest<Item> = Item.fetchRequest()
         
         //String comparisons are by default case and diacritic sensitive. we avoid this behaivior with CONTAINS[cd]
-        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
         
-        request.predicate = predicate
+        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
         
-        let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
-        request.sortDescriptors = [sortDescriptor]
-        
-        do {
-            array = try context.fetch(request)
-        } catch {
-            print("There was an error fetching data from context: \(error)")
+        loadItems(with: request)
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text?.count == 0 {
+            loadItems()
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
+            
         }
-        
-        tableView.reloadData()
-        
     }
     
 }
