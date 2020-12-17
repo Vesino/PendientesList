@@ -96,6 +96,8 @@ class TodoListViewController: UITableViewController {
         
         self.tableView.reloadData()
     }
+    
+    
     func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {
         //We need to specifi the type of the output
         //let request : NSFetchRequest<Item> = Item.fetchRequest()

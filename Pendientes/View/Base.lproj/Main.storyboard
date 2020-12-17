@@ -7,6 +7,45 @@
     </dependencies>
     <scenes>
         <!--Pendientes-->
+        <scene sceneID="7lB-2I-8M1">
+            <objects>
+                <tableViewController id="auG-8J-o1T" customClass="CategoryViewController" customModule="Pendientes" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="aTP-XI-BtA">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CategoryCell" id="VX9-Ml-7Y4">
+                                <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="VX9-Ml-7Y4" id="N2c-Ew-xSH">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="auG-8J-o1T" id="93N-Gb-Wjx"/>
+                            <outlet property="delegate" destination="auG-8J-o1T" id="gu5-V1-UR1"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Pendientes" id="MUJ-xx-rUP">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="7xU-ku-7Zs">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="addButtonPressed:" destination="auG-8J-o1T" id="GRC-kl-fpS"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <segue destination="S2N-vY-gS0" kind="show" identifier="goToItems" id="Mug-E2-K4g"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wYY-PY-PYn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1161" y="94"/>
+        </scene>
+        <!--Pendientes-->
         <scene sceneID="9iD-nj-aiN">
             <objects>
                 <tableViewController id="S2N-vY-gS0" customClass="TodoListViewController" customModule="Pendientes" customModuleProvider="target" sceneMemberID="viewController">
@@ -48,7 +87,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="op4-VO-hjg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1713.0434782608697" y="93.75"/>
+            <point key="canvasLocation" x="1986" y="94"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="kO9-YQ-LBe">
@@ -58,6 +97,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="g7B-eq-teV">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="barTintColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
@@ -66,12 +106,12 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="S2N-vY-gS0" kind="relationship" relationship="rootViewController" id="9H6-0B-ySg"/>
+                        <segue destination="auG-8J-o1T" kind="relationship" relationship="rootViewController" id="W93-iy-FZX"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="whn-TG-xVv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="802.89855072463774" y="93.75"/>
+            <point key="canvasLocation" x="378" y="94"/>
         </scene>
     </scenes>
 </document>
