@@ -13,14 +13,17 @@ class TodoListViewController: UITableViewController {
     
     //array de Items Objects
     var array = [Item]()
+    
+    var selectedCategory: Category? {
+        didSet {
+            loadItems()
+        }
+    }
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
         super.viewDidLoad()
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
-        
-        //var searchBardelegate: UISearchBarDelegate = self
-        loadItems()
         
     }
     
@@ -73,6 +76,7 @@ class TodoListViewController: UITableViewController {
                 let newItemAdded = Item(context: self.context)
                 newItemAdded.title = itemAdded
                 newItemAdded.done = false
+                newItemAdded.parentCategory = self.selectedCategory
                 self.array.append(newItemAdded)
                 
                 self.saveItem()
@@ -98,9 +102,19 @@ class TodoListViewController: UITableViewController {
     }
     
     
-    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {
+    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest(), predicate: NSPredicate? = nil) {
         //We need to specifi the type of the output
         //let request : NSFetchRequest<Item> = Item.fetchRequest()
+        
+        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
+        
+        
+        if let additionalPredicate = predicate {
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, additionalPredicate])
+        } else {
+            request.predicate = categoryPredicate
+        }
+        
         do {
             array = try context.fetch(request)
         } catch {
@@ -121,11 +135,11 @@ extension TodoListViewController: UISearchBarDelegate {
         let request: NSFetchRequest<Item> = Item.fetchRequest()
         
         //String comparisons are by default case and diacritic sensitive. we avoid this behaivior with CONTAINS[cd]
-        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
         
         request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
         
-        loadItems(with: request)
+        loadItems(with: request, predicate: predicate)
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
