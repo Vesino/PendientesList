@@ -8,10 +8,12 @@
 
 import UIKit
 import CoreData
+import SwipeCellKit
 
 class CategoryViewController: UITableViewController {
     
     var categoryArray = [Category]()
+    
     //here we applied singleton principle
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
@@ -19,6 +21,7 @@ class CategoryViewController: UITableViewController {
         super.viewDidLoad()
         
         loadCategories()
+        tableView.rowHeight = 80.0
         
     }
     
@@ -74,6 +77,7 @@ class CategoryViewController: UITableViewController {
         tableView.reloadData()
     }
     
+    
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return categoryArray.count
@@ -81,8 +85,8 @@ class CategoryViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath) as! SwipeTableViewCell
+        cell.delegate = self
         let category = categoryArray[indexPath.row]
         
         cell.textLabel?.text = category.name
@@ -107,8 +111,28 @@ class CategoryViewController: UITableViewController {
         
     }
     
+}
+
+//MARK: - Extensions fo main CategoryViewcontroller
+extension CategoryViewController: SwipeTableViewCellDelegate {
     
-    
-    //MARK: - Data manipulation methods
-    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        guard orientation == .right else { return nil }
+
+        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
+            // handle action by updating model with deletion
+            print("Item deleted")
+            let categoryForDeletion = self.categoryArray[indexPath.row]
+            self.context.delete(categoryForDeletion)
+            
+            self.saveCategory()
+
+        }
+
+        // customize the action appearance
+        deleteAction.image = UIImage(named: "delete-icon")
+
+        return [deleteAction]
+    }
+
 }
