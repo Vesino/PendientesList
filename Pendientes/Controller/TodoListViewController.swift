@@ -32,7 +32,7 @@ class TodoListViewController: UITableViewController {
         return array.count
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TodoItemCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         let item = array[indexPath.row]
         cell.textLabel?.text = item.title
         //Ternary operator
